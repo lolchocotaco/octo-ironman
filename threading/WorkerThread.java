@@ -1,3 +1,5 @@
+package threading;
+
 public class WorkerThread implements Runnable {
      
     private String command;

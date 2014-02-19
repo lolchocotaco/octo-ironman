@@ -1,3 +1,5 @@
+package histogram;
+
 import java.net.*;
 import java.io.*;
 import java.awt.image.BufferedImage;
@@ -7,7 +9,7 @@ public class ImageThread extends Thread {
     private Socket socket = null;
 
     public ImageThread(Socket socket) {
-        super("ImageThread");
+        super("histogram.ImageThread");
         this.socket = socket;
     }
 

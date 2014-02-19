@@ -1,3 +1,5 @@
+package histogram;
+
 import java.net.*;
 import java.io.*;
 
@@ -5,7 +7,7 @@ public class KKMultiServer {
     public static void main(String[] args) throws IOException {
 
     if (args.length != 1) {
-        System.err.println("Usage: java KKMultiServer <port number>");
+        System.err.println("Usage: java histogram.KKMultiServer <port number>");
         System.exit(1);
     }
 
