@@ -5,6 +5,9 @@ import java.net.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
+
+// TODO: Connect to MasterServer
+// Listen for response from server to connect to correct worker
 public class HistogramClient {
     public static void main(String[] args) throws IOException {
 
