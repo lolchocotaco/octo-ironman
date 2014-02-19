@@ -25,6 +25,7 @@ public class WorkerPool {
         MyMonitorThread monitor = new MyMonitorThread(executorPool, 3);
         Thread monitorThread = new Thread(monitor);
         monitorThread.start();
+
         //submit work to the thread pool
         for(int i=0; i<10; i++){
             executorPool.execute(new WorkerThread("cmd"+i));
