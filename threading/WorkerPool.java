@@ -1,5 +1,6 @@
 package threading;
 
+import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -12,7 +13,7 @@ public class WorkerPool {
 	protected static final int KEEP_ALIVE_TIME = 10;
 	protected static final int WORK_Q_SIZE = 2;	
  
-    public static void main(String args[]) throws InterruptedException {
+    public static void main(String args[]) throws InterruptedException, IOException {
         //RejectedExecutionHandler implementation
         RejectionHandler rejectionHandler = new RejectionHandler();
         //Get the ThreadFactory implementation to use

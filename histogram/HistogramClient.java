@@ -38,7 +38,7 @@ public class HistogramClient {
             System.out.println("Image sent over socket");
             BufferedImage result = ImageIO.read(in);
             System.out.println("Result received");
-            ImageIO.write(result, "JPG", new File("new-"+args[2]));
+            ImageIO.write(result, "JPG", new File(args[2]+"-new.jpg"));
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);

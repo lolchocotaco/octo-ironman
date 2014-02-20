@@ -1,7 +1,13 @@
 package histogram;
 
+import threading.MasterWorkerListener;
+
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 /**
  * Redirects requests from Histogram Client to Proper worker.
@@ -12,10 +18,17 @@ import java.net.ServerSocket;
 public class MasterServer {
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        if (args.length != 1) {
-            System.err.println("Usage: java histogram.MasterServer <port number>");
+        if (args.length != 2) {
+            System.err.println("Usage: java histogram.MasterServer <port number for clients> <port number for workers>");
             System.exit(1);
         }
+
+
+        Comparator<WorkerData> comparator = new WorkerDataComparator();
+        PriorityQueue<WorkerData> workerQueue = new PriorityQueue<>(10, comparator);
+        Map <String, WorkerData> workerHash = new HashMap<>();
+
+        new MasterWorkerListener(Integer.parseInt(args[1]), workerQueue, workerHash).run();
 
         int portNumber = Integer.parseInt(args[0]);
         boolean listening = true;

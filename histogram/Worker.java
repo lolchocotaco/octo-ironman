@@ -25,7 +25,7 @@ public class Worker {
     public static void main(String[] args) throws IOException, InterruptedException {
 
     if (args.length != 1) {
-        System.err.println("Usage: java histogram.Worker <port number>");
+        System.err.println("Usage: java histogram.Worker <port number for clients> <hostname of master> <port number of master>");
         System.exit(1);
     }
 
@@ -43,9 +43,9 @@ public class Worker {
                 new ArrayBlockingQueue<Runnable>(WORK_Q_SIZE), threadFactory, rejectionHandler);
 //
 //        start the monitoring thread
-//        MyMonitorThread monitor = new MyMonitorThread(executorPool, 3);
-//        Thread monitorThread = new Thread(monitor);
-//        monitorThread.start();
+        MyMonitorThread monitor = new MyMonitorThread(executorPool, 3, args[1], Integer.parseInt(args[2]));
+        Thread monitorThread = new Thread(monitor);
+        monitorThread.start();
 
 
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
@@ -58,7 +58,7 @@ public class Worker {
             System.exit(-1);
         }
 
-        Thread.sleep(30000);
+        Thread.sleep(5000);
         executorPool.shutdown();
     }
 }
