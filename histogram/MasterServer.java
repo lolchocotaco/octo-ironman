@@ -2,8 +2,9 @@ package histogram;
 
 import threading.MasterWorkerListener;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,15 +29,30 @@ public class MasterServer {
         PriorityQueue<WorkerData> workerQueue = new PriorityQueue<>(10, comparator);
         Map <String, WorkerData> workerHash = new HashMap<>();
 
-        new MasterWorkerListener(Integer.parseInt(args[1]), workerQueue, workerHash).run();
+        new MasterWorkerListener(Integer.parseInt(args[1]), workerQueue, workerHash).start();
 
+        System.out.println("Im HERE");
         int portNumber = Integer.parseInt(args[0]);
         boolean listening = true;
 
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
+            System.out.println("Listening for Client Connections on master");
             while (listening) {
                 System.out.println("New Connection");
-                // TODO: Determine which worker to connect to
+                try {
+                    Socket socket = serverSocket.accept();
+                    System.out.println("Accepted New Client Connection on Master");
+                    OutputStream os = socket.getOutputStream();
+                    ObjectOutputStream oos = new ObjectOutputStream(os);
+                    WorkerData data = workerQueue.poll();
+                    workerHash.remove(data.getHashKey());
+                    System.out.println("Next worker: " + data);
+                    oos.writeObject(data);
+                    oos.close();
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (IOException e) {
             System.err.println("Could not listen on port " + portNumber);

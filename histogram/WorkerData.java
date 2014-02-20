@@ -25,4 +25,13 @@ public class WorkerData implements Serializable {
     public double getWorkerLoad() {
         return this.workerLoad;
     }
+
+    public String getHashKey(){
+        return this.hostname + ":" + this.portNumber;
+    }
+
+    @Override
+    public String toString(){
+        return this.hostname + ":" + this.portNumber + " load: " + this.workerLoad;
+    }
 }

@@ -23,8 +23,20 @@ public class HistogramClient {
         try {
             Socket socket = new Socket(hostName, portNumber);
             System.out.println("Connection Established");
-            DataInputStream in = new DataInputStream(socket.getInputStream());
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+
+            InputStream is = socket.getInputStream();
+            ObjectInputStream ois = new ObjectInputStream(is);
+            WorkerData data = (WorkerData) ois.readObject();
+            System.out.println("Received data: " + data);
+            ois.close();
+            is.close();
+            socket.close();
+
+            Socket workerSocket = new Socket(data.getHostname(), data.getPortNumber());
+
+
+            DataInputStream in = new DataInputStream(workerSocket.getInputStream());
+            DataOutputStream out = new DataOutputStream(workerSocket.getOutputStream());
             BufferedImage bimg = ImageIO.read(new File(args[2]));
             System.out.println("Image read in");
             //ImageIO.write(bimg, "JPG", out);
@@ -46,6 +58,8 @@ public class HistogramClient {
             System.err.println("Couldn't get I/O for the connection to " +
                 hostName);
             System.exit(1);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

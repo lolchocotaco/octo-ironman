@@ -5,12 +5,13 @@ import histogram.WorkerData;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-public class MasterWorkerListener implements Runnable{
+public class MasterWorkerListener extends Thread{
 
     int portNumber;
     ServerSocket socket;
@@ -26,19 +27,24 @@ public class MasterWorkerListener implements Runnable{
 
     public void run() {
         boolean listening = true;
+        System.out.println("Listening for workers on master");
         while (listening) {
             try {
                 Socket s = this.socket.accept();
+                System.out.println("Accepted New Worker Connection on Master");
                 InputStream is = s.getInputStream();
                 ObjectInputStream ois = new ObjectInputStream(is);
                 WorkerData lData = (WorkerData) ois.readObject();
-                String key = lData.getHostname() + lData.getPortNumber();
+                System.out.println("Got Data Object:" + lData.toString());
+                String key = lData.getHashKey();
+                System.out.println(this.queue);
                 if (this.hash.containsKey(key)){
                     WorkerData toRemove = this.hash.get(key);
                     this.queue.remove(toRemove);
                 }
                 this.queue.add(lData);
                 this.hash.put(key, lData);
+                System.out.println(this.queue);
 
                 is.close();
                 s.close();

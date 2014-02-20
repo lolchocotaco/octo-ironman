@@ -17,29 +17,27 @@ import java.util.concurrent.ThreadPoolExecutor;
  * the executor information at certain time interval.
  */
 
-public class MyMonitorThread implements Runnable
-{
+public class MyMonitorThread extends Thread {
     private ThreadPoolExecutor executor;
     private int seconds;
     private boolean run=true;
     private String hostname;
     private int portNumber;
-    private Socket socket;
+    private int clientPortNumber;
 
  
-    public MyMonitorThread(ThreadPoolExecutor executor, int delay, String hostname, int port) throws IOException {
+    public MyMonitorThread(ThreadPoolExecutor executor, int delay, String hostname, int port, int clientPort) throws IOException {
         this.executor = executor;
         this.seconds=delay;
         this.hostname = hostname;
         this.portNumber=port;
-        this.socket = new Socket(hostname, port);
+        this.clientPortNumber = clientPort;
     }
      
     public void shutdown(){
         this.run=false;
     }
- 
-    @Override
+
     public void run()
     {
         while(run){
@@ -55,17 +53,24 @@ public class MyMonitorThread implements Runnable
             try {
                 OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
                 double load = osBean.getSystemLoadAverage();
-                WorkerData data = new WorkerData(this.hostname, this.portNumber, load);
-                OutputStream os = this.socket.getOutputStream();
+                Socket socket = new Socket(this.hostname, this.portNumber);
+                WorkerData data = new WorkerData(socket.getLocalAddress().getHostName(), this.clientPortNumber, load);
+                OutputStream os = socket.getOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(os);
                 oos.writeObject(data);
                 oos.close();
                 os.close();
+                System.out.println("MyMonitor sent data: " + data.toString());
                 Thread.sleep(seconds*1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+                try {
+                    Thread.sleep(seconds*1000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
              
