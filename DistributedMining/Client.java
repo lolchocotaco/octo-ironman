@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 
-// TODO: Connect to LoadBalancer
 // Listen for response from server to connect to correct worker
 public class Client {
     public static void main(String[] args) throws IOException {

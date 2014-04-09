@@ -25,18 +25,19 @@ public class MineHandler extends Thread {
 
 
             StringContainer hashString = (StringContainer)in.readObject();
-//            in.close();
-//            is.close();
 
             System.out.println("Hash received: "+ hashString.GetString());
             // Set up threadpools with mining threads.
             // run mining threads
+            StringContainer result = new StringContainer("");
+            Thread miningThread = new MiningThread(hashString.GetString(),result, 0, 1000);
+            miningThread.start();
+            miningThread.join();
 
+            System.out.println("Result from thread: " + result.GetString());
             OutputStream os = socket.getOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(os);
-
-            StringContainer response = new StringContainer(hashString.GetString()+ " Returning Penis");
-            out.writeObject(response);
+            out.writeObject(result);
 //            out.flush();
             in.close();
             is.close();
@@ -46,7 +47,7 @@ public class MineHandler extends Thread {
 
             socket.close();
             System.out.println("Socket Connection Closed");
-            this.join();
+//            this.join();
 
         } catch (IOException e) {
             e.printStackTrace();

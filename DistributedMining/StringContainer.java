@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public class StringContainer implements Serializable {
 
-	private String str;
+
+
+    private String str;
 
 	public StringContainer(String str)
 	{
@@ -15,6 +17,10 @@ public class StringContainer implements Serializable {
 	{
 		return str;
 	}
+
+    public void setString(String str) {
+        this.str = str;
+    }
 
     @Override
     public String toString(){
