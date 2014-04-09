@@ -1,4 +1,4 @@
-package histogram;
+package DistributedMining;
 
 import java.util.Comparator;
 

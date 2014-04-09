@@ -1,4 +1,4 @@
-package histogram;
+package DistributedMining;
 
 import threading.MyMonitorThread;
 import threading.RejectionHandler;
@@ -25,7 +25,7 @@ public class Worker {
     public static void main(String[] args) throws IOException, InterruptedException {
 
     if (args.length != 3) {
-        System.err.println("Usage: java histogram.Worker <port number for clients> <hostname of master> <port number of master>");
+        System.err.println("Usage: java Worker <port number for clients> <hostname of LB> <port number of LB>");
         System.exit(1);
     }
 
@@ -41,9 +41,8 @@ public class Worker {
         ThreadPoolExecutor executorPool =
                 new ThreadPoolExecutor(THREAD_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<Runnable>(WORK_Q_SIZE), threadFactory, rejectionHandler);
-//
 //        start the monitoring thread
-        MyMonitorThread monitor = new MyMonitorThread(executorPool, 10, args[1], Integer.parseInt(args[2]), portNumber);
+        MyMonitorThread monitor = new MyMonitorThread(executorPool, 1, args[1], Integer.parseInt(args[2]), portNumber);
         Thread monitorThread = new Thread(monitor);
         monitorThread.start();
 
@@ -54,7 +53,7 @@ public class Worker {
                 System.out.println("Waiting for next connection");
                 Socket s = serverSocket.accept();
                 System.out.println("New Connection");
-                executorPool.execute( new ImageThread(s) );
+                executorPool.execute( new MineHandler(s) );
             }
         } catch (IOException e) {
             System.err.println("Could not listen on port " + portNumber);

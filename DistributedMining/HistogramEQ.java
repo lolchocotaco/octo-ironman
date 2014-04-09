@@ -1,4 +1,4 @@
-package histogram;
+package DistributedMining;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
  
 /**
- * Image histogram equalization
+ * Image DistributedMining equalization
  *
  * Author: Bostjan Cigan (http://zerocool.is-a-geek.net)
  *
@@ -35,7 +35,7 @@ public class HistogramEQ {
         int alpha;
         int newPixel = 0;
  
-        // Get the Lookup table for histogram equalization
+        // Get the Lookup table for DistributedMining equalization
         ArrayList<int[]> histLUT = histogramEqualizationLUT(original);
  
         BufferedImage histogramEQ = new BufferedImage(original.getWidth(), original.getHeight(), original.getType());
@@ -49,7 +49,7 @@ public class HistogramEQ {
                 green = new Color(original.getRGB (i, j)).getGreen();
                 blue = new Color(original.getRGB (i, j)).getBlue();
  
-                // Set new pixel values using the histogram lookup table
+                // Set new pixel values using the DistributedMining lookup table
                 red = histLUT.get(0)[red];
                 green = histLUT.get(1)[green];
                 blue = histLUT.get(2)[blue];
@@ -67,10 +67,10 @@ public class HistogramEQ {
  
     }
  
-    // Get the histogram equalization lookup table for separate R, G, B channels
+    // Get the DistributedMining equalization lookup table for separate R, G, B channels
     private static ArrayList<int[]> histogramEqualizationLUT(BufferedImage input) {
  
-        // Get an image histogram - calculated values by R, G, B channels
+        // Get an image DistributedMining - calculated values by R, G, B channels
         ArrayList<int[]> imageHist = imageHistogram(input);
  
         // Create the lookup table
@@ -123,7 +123,7 @@ public class HistogramEQ {
  
     }
  
-    // Return an ArrayList containing histogram values for separate R, G, B channels
+    // Return an ArrayList containing DistributedMining values for separate R, G, B channels
     public static ArrayList<int[]> imageHistogram(BufferedImage input) {
  
         int[] rhistogram = new int[256];

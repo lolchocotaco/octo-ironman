@@ -1,8 +1,6 @@
 all:
-	javac histogram/HistogramClient.java
-	javac histogram/Worker.java
-	javac histogram/MasterServer.java
-	javac threading/MyMonitorThread.java
-	javac threading/MasterWorkerListener.java
+	javac DistributedMining/*.java
+	javac threading/*.java
 clean:
-	rm *.class
+	rm DistributedMining/*.class
+	rm threading/*.class	

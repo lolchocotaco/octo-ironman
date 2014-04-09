@@ -1,6 +1,6 @@
 package threading;
 
-import histogram.WorkerData;
+import DistributedMining.WorkerData;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.net.Socket;
+import java.util.Date;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /*
@@ -54,7 +55,7 @@ public class MyMonitorThread extends Thread {
                 OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
                 double load = osBean.getSystemLoadAverage();
                 Socket socket = new Socket(this.hostname, this.portNumber);
-                WorkerData data = new WorkerData(socket.getLocalAddress().getHostName(), this.clientPortNumber, load);
+                WorkerData data = new WorkerData(socket.getLocalAddress().getHostName(), this.clientPortNumber, load, new Date());
                 OutputStream os = socket.getOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(os);
                 oos.writeObject(data);

@@ -1,17 +1,21 @@
-package histogram;
+package DistributedMining;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class WorkerData implements Serializable {
+
 
     private String hostname;
     private int portNumber;
     private double workerLoad;
+    private Date date;
 
-    public WorkerData(String hostname, int portNumber, double workerLoad) {
+    public WorkerData(String hostname, int portNumber, double workerLoad, Date date) {
         this.hostname = hostname;
         this.portNumber = portNumber;
         this.workerLoad = workerLoad;
+        this.date = date;
     }
 
     public String getHostname() {
@@ -28,6 +32,10 @@ public class WorkerData implements Serializable {
 
     public String getHashKey(){
         return this.hostname + ":" + this.portNumber;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     @Override

@@ -1,11 +1,10 @@
 package threading;
 
-import histogram.WorkerData;
+import DistributedMining.WorkerData;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
@@ -27,7 +26,7 @@ public class MasterWorkerListener extends Thread{
 
     public void run() {
         boolean listening = true;
-        System.out.println("Listening for workers on master");
+        System.out.println("Waiting for workers on master");
         while (listening) {
             try {
                 Socket s = this.socket.accept();
