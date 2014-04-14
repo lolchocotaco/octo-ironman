@@ -2,23 +2,27 @@ package DistributedMining;
 
 import java.io.*;
 import java.net.*;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 
 
 // Listen for response from server to connect to correct worker
 public class Client {
     public static void main(String[] args) throws IOException {
 
-        if (args.length != 3) {
+        if (args.length != 5) {
             System.err.println(
-                "Usage: java Client <LB Host Name> <LB port number> <HashString>");
+                "Usage: java Client <LB Host Name> <LB port number> <input> <output> <p_mutation>");
+            System.exit(1);
+        }
+
+        if( args[2].length() != args[3].length()){
+            System.err.println("Input and Output string must be the same length");
             System.exit(1);
         }
 
         String hostName = args[0];
         int portNumber = Integer.parseInt(args[1]);
-        String hashString = args[2];
+        JobInfo job = new JobInfo(args[2],args[3],Double.parseDouble(args[4]));
+
 
         try {
             Socket socket = new Socket(hostName, portNumber);
@@ -40,18 +44,19 @@ public class Client {
             OutputStream os = workerSocket.getOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(os);
 
-            System.out.println("Writing string to worker...");
-            StringContainer stringCont = new StringContainer(hashString);
-            out.writeObject(stringCont);
+            System.out.println("Giving job to worker...");
+            out.writeObject(job);
 //            out.flush();
 
-            System.out.println("String sent over socket");
+            System.out.println("Job sent over socket");
 
             is = workerSocket.getInputStream();
             ObjectInputStream in = new ObjectInputStream(is);
 
-            StringContainer result = (StringContainer)in.readObject();
-            System.out.println("Result received: "+ result.GetString());
+            JobInfo result = (JobInfo)in.readObject();
+            System.out.println("String sent    : "+ job.getInput());
+            System.out.println("Result received: "+ result.getEstimate());
+            System.out.println("Goal State     : "+ job.getOutput());
 
             out.close();
             os.close();

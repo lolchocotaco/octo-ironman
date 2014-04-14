@@ -53,7 +53,7 @@ public class Worker {
                 System.out.println("Waiting for next connection");
                 Socket s = serverSocket.accept();
                 System.out.println("New Connection");
-                executorPool.execute( new MineHandler(s) );
+                executorPool.execute( new JobHandler(s) );
             }
         } catch (IOException e) {
             System.err.println("Could not listen on port " + portNumber);

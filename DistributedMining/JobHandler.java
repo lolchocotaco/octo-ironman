@@ -2,14 +2,12 @@ package DistributedMining;
 
 import java.net.*;
 import java.io.*;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 
-public class MineHandler extends Thread {
+public class JobHandler extends Thread {
     private Socket socket = null;
 
-    public MineHandler(Socket socket) {
-        super("DistributedMining.MineHandler");
+    public JobHandler(Socket socket) {
+        super("DistributedMining.JobHandler");
         this.socket = socket;
     }
 
@@ -24,20 +22,20 @@ public class MineHandler extends Thread {
             System.out.println(socket.toString());
 
 
-            StringContainer hashString = (StringContainer)in.readObject();
+            JobInfo job = (JobInfo)in.readObject();
 
-            System.out.println("Hash received: "+ hashString.GetString());
+            System.out.println("Job received: "+ job.toString());
             // Set up threadpools with mining threads.
             // run mining threads
-            StringContainer result = new StringContainer("");
-            Thread miningThread = new MiningThread(hashString.GetString(),result, 0, 1000);
-            miningThread.start();
-            miningThread.join();
 
-            System.out.println("Result from thread: " + result.GetString());
+//            JobInfo result = new JobInfo("");
+            Thread jobThread = new JobThread(job);
+            jobThread.start();
+            jobThread.join();
+
             OutputStream os = socket.getOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(os);
-            out.writeObject(result);
+            out.writeObject(job);
 //            out.flush();
             in.close();
             is.close();
