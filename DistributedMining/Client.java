@@ -8,20 +8,20 @@ import java.net.*;
 public class Client {
     public static void main(String[] args) throws IOException {
 
-        if (args.length != 5) {
+        if (args.length != 6) {
             System.err.println(
-                "Usage: java Client <LB Host Name> <LB port number> <input> <output> <p_mutation>");
+                "Usage: java Client <LB Host Name> <LB port number> <input> <output> <population_size> <p_mutation>");
             System.exit(1);
         }
 
-        if( args[2].length() != args[3].length()){
+        if(args[2].length() != args[3].length()){
             System.err.println("Input and Output string must be the same length");
             System.exit(1);
         }
 
         String hostName = args[0];
         int portNumber = Integer.parseInt(args[1]);
-        JobInfo job = new JobInfo(args[2],args[3],Double.parseDouble(args[4]));
+        JobInfo job = new JobInfo(args[2],args[3],Integer.parseInt(args[4]),Double.parseDouble(args[5]));
 
 
         try {

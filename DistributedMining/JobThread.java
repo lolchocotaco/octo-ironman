@@ -11,30 +11,26 @@ import java.util.concurrent.PriorityBlockingQueue;
 public class JobThread extends Thread {
 
     private JobInfo job;
+    private Queue<Organism> currentPopulation;
+    private Queue<Organism> nextPopulation;
     private PriorityBlockingQueue<Organism> queue;
 
-    public JobThread(JobInfo job, PriorityBlockingQueue<Organism> queue) {
+    public JobThread(JobInfo job, Queue<Organism> currentPopulation, Queue<Organism> nextPopulation, PriorityBlockingQueue<Organism> queue) {
     	super("JobThread");
         this.job = job;
+        this.currentPopulation = currentPopulation;
+        this.nextPopulation = nextPopulation;
         this.queue = queue;
     }
 
     public void run() {
-        System.out.println("Processing Request");
+//        String input = job.getInput();
+//        String output = job.getOutput();
 
-        int population = queue.size();
 
-        String input = job.getInput();
-        String output = job.getOutput();
-
-        Queue<Organism> currentPopulation = new ArrayBlockingQueue<Organism>(population);
-        Queue<Organism> nextPopulation = new ArrayBlockingQueue<Organism>(population);
-        queue.drainTo(currentPopulation, queue.size()/2);   //drain some portion of the queue eventually
-        queue.clear();
-
-        for(int j = 0; j < currentPopulation.size()/2; j++){
-            Organism org1 = currentPopulation.poll();
-            Organism org2 = currentPopulation.poll();
+        for(int j = 0; j < this.currentPopulation.size()/2; j++){
+            Organism org1 = this.currentPopulation.poll();
+            Organism org2 = this.currentPopulation.poll();
 
             Queue<String> children = JobInfo.breed(org1.getData(), org2.getData());
 
@@ -44,12 +40,12 @@ public class JobThread extends Thread {
             Organism org3 = new Organism(child1, JobInfo.fitness(child1, job.getOutput()));
             Organism org4 = new Organism(child2, JobInfo.fitness(child2, job.getOutput()));
 
-            nextPopulation.add(org1);
-            nextPopulation.add(org2);
-            nextPopulation.add(org3);
-            nextPopulation.add(org4);
+            this.nextPopulation.add(org1);
+            this.nextPopulation.add(org2);
+            this.nextPopulation.add(org3);
+            this.nextPopulation.add(org4);
         }
 
-        queue.addAll(nextPopulation);
+        this.queue.addAll(this.nextPopulation);
     }
 }

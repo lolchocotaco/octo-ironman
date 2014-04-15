@@ -2,6 +2,9 @@ package DistributedMining;
 
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 public class JobHandler extends Thread {
@@ -27,10 +30,13 @@ public class JobHandler extends Thread {
             // Set up threadpools with mining threads.
             // run mining threads
 
-            //set up queue
-            int population = 12;
+            //set up
+            int n_threads = 3;
+            int population = job.getPopulation_size();
             OrganismComparator orgCompare = new OrganismComparator();
             PriorityBlockingQueue<Organism> queue = new PriorityBlockingQueue<Organism>(population, orgCompare);
+            ArrayList<Thread> threads = new ArrayList<>(n_threads);
+
 
             for( int i = 0; i < population; i++){
                 String tmp1 = JobInfo.mutate(job.getInput(), job.getP_mutation());
@@ -38,11 +44,30 @@ public class JobHandler extends Thread {
                 queue.add(temp);
             }
 
-
             for(int i = 0; i < 10000; i++){
-                Thread jobThread = new JobThread(job, queue);
-                jobThread.start();
-                jobThread.join();
+
+                //termination condition
+                if(job.getOutput().equals(queue.peek().getData()))
+                    break;
+
+                //farm out portions of the current population
+                for(int j = 0; j < n_threads; j++){
+                    Queue<Organism> currentPopulation = new ArrayBlockingQueue<Organism>(population);
+                    Queue<Organism> nextPopulation = new ArrayBlockingQueue<Organism>(population);
+                    queue.drainTo(currentPopulation, population / n_threads / 2);   //drain some portion of the queue eventually
+                    threads.add(new JobThread(job, currentPopulation, nextPopulation, queue));
+                }
+
+                //kill off the unfit organisms
+                queue.clear();
+
+                //breed, mutate, and compute fitness
+                for(int j = 0; j < n_threads; j++){
+                    threads.get(j).start();
+                    threads.get(j).join();
+                }
+
+                threads.clear();
             }
 
             System.out.println("Done Evolving");

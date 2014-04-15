@@ -13,12 +13,14 @@ public class JobInfo implements Serializable {
     private String output;
     private String estimate;
     private int    n_iter;
+    private int    population_size;
     private double p_mutation;
 
-    public JobInfo(String input, String output, double p_mutation) {
+    public JobInfo(String input, String output, int population_size, double p_mutation) {
         this.input = input;
         this.output = output;
         this.p_mutation = p_mutation;
+        this.population_size = population_size;
         this.n_iter = 0;
         this.estimate = "";
     }
@@ -80,5 +82,9 @@ public class JobInfo implements Serializable {
 
     public void setEstimate(String estimate) {
         this.estimate = estimate;
+    }
+
+    public int getPopulation_size() {
+        return population_size;
     }
 }
