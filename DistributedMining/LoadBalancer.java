@@ -52,7 +52,7 @@ public class LoadBalancer {
                     while ((new Date().getTime() - data.getDate().getTime() >= 2 * 1000));
 
                     workerHash.remove(data.getHashKey());
-                    System.out.println("Next worker: " + data);
+                    //System.out.println("Next worker: " + data);
                     oos.writeObject(data);
                     oos.close();
                     os.close();

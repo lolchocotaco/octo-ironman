@@ -26,24 +26,24 @@ public class MasterWorkerListener extends Thread{
 
     public void run() {
         boolean listening = true;
-        System.out.println("Waiting for workers on master");
+        //System.out.println("Waiting for workers on master");
         while (listening) {
             try {
                 Socket s = this.socket.accept();
-                System.out.println("Accepted New Worker Connection on Master");
+                //System.out.println("Accepted New Worker Connection on Master");
                 InputStream is = s.getInputStream();
                 ObjectInputStream ois = new ObjectInputStream(is);
                 WorkerData lData = (WorkerData) ois.readObject();
-                System.out.println("Got Data Object:" + lData.toString());
+                //System.out.println("Got Data Object:" + lData.toString());
                 String key = lData.getHashKey();
-                System.out.println(this.queue);
+                //System.out.println(this.queue);
                 if (this.hash.containsKey(key)){
                     WorkerData toRemove = this.hash.get(key);
                     this.queue.remove(toRemove);
                 }
                 this.queue.add(lData);
                 this.hash.put(key, lData);
-                System.out.println(this.queue);
+                //System.out.println(this.queue);
 
                 is.close();
                 s.close();
