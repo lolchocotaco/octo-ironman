@@ -30,7 +30,6 @@ public class JobInfo implements Serializable {
         for(int i = 0; i < in.length(); i++){
             fitval += Math.pow( in.charAt(i) - out.charAt(i), 2);
         }
-//        System.out.println("Fitness Val: " + fitval);
         return fitval;
     }
 
@@ -40,7 +39,7 @@ public class JobInfo implements Serializable {
 
         for(int i = 0; i < charArray.length; i++){
             if(Math.random() < p_mutation) {
-                charArray[i] += (rand.nextInt(2)-1);
+                charArray[i] += (rand.nextInt(2)*2-1);
             }
         }
         return String.valueOf(charArray);

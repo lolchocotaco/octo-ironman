@@ -27,7 +27,6 @@ public class JobThread extends Thread {
 //        String input = job.getInput();
 //        String output = job.getOutput();
 
-
         for(int j = 0; j < this.currentPopulation.size()/2; j++){
             Organism org1 = this.currentPopulation.poll();
             Organism org2 = this.currentPopulation.poll();
