@@ -21,3 +21,7 @@ run one or more client jobs
 ```
 java DistributedMining.Client <LB Host Name> <LB port number> <input> <output> <population_size> <p_mutation>
 ```
+
+System Performance vs Nodes
+----------------------------
+![alt tag](http://i.imgur.com/SeAYQLH.jpg)
