@@ -9,12 +9,14 @@ public class WorkerData implements Serializable {
     private String hostname;
     private int portNumber;
     private double workerLoad;
+    private int clientCount;
     private Date date;
 
-    public WorkerData(String hostname, int portNumber, double workerLoad, Date date) {
+    public WorkerData(String hostname, int portNumber, double workerLoad, int clientCount, Date date) {
         this.hostname = hostname;
         this.portNumber = portNumber;
         this.workerLoad = workerLoad;
+        this.clientCount = clientCount;
         this.date = date;
     }
 
@@ -28,6 +30,10 @@ public class WorkerData implements Serializable {
 
     public double getWorkerLoad() {
         return this.workerLoad;
+    }
+
+    public int getClientCount() {
+	return this.clientCount;
     }
 
     public String getHashKey(){

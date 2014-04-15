@@ -54,8 +54,9 @@ public class MyMonitorThread extends Thread {
             try {
                 OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
                 double load = osBean.getSystemLoadAverage();
+		int clientCount = this.executor.getActiveCount();
                 Socket socket = new Socket(this.hostname, this.portNumber);
-                WorkerData data = new WorkerData(socket.getLocalAddress().getHostName(), this.clientPortNumber, load, new Date());
+                WorkerData data = new WorkerData(socket.getLocalAddress().getHostName(), this.clientPortNumber, load, clientCount, new Date());
                 OutputStream os = socket.getOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(os);
                 oos.writeObject(data);

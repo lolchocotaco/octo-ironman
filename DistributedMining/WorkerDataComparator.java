@@ -6,10 +6,10 @@ public class WorkerDataComparator implements Comparator<WorkerData>{
 
     @Override
     public int compare(WorkerData x, WorkerData y){
-        if (x.getWorkerLoad() < y.getWorkerLoad()) {
+        if (x.getClientCount() < y.getClientCount()) {
             return -1;
         }
-        else if (x.getWorkerLoad() > y.getWorkerLoad()) {
+        else if (x.getClientCount() > y.getClientCount()) {
             return 1;
         }
         return 0;
