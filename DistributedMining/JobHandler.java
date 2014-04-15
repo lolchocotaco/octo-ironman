@@ -2,6 +2,7 @@ package DistributedMining;
 
 import java.net.*;
 import java.io.*;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class JobHandler extends Thread {
     private Socket socket = null;
@@ -18,9 +19,7 @@ public class JobHandler extends Thread {
 
             ObjectInputStream in = new ObjectInputStream(is);
 
-            //BufferedImage imBuff = ImageIO.read(in);
             System.out.println(socket.toString());
-
 
             JobInfo job = (JobInfo)in.readObject();
 
@@ -28,15 +27,31 @@ public class JobHandler extends Thread {
             // Set up threadpools with mining threads.
             // run mining threads
 
-//            JobInfo result = new JobInfo("");
-            Thread jobThread = new JobThread(job);
-            jobThread.start();
-            jobThread.join();
+            //set up queue
+            int population = 12;
+            OrganismComparator orgCompare = new OrganismComparator();
+            PriorityBlockingQueue<Organism> queue = new PriorityBlockingQueue<Organism>(population, orgCompare);
+
+            for( int i = 0; i < population; i++){
+                String tmp1 = JobInfo.mutate(job.getInput(), job.getP_mutation());
+                Organism temp = new Organism(tmp1, JobInfo.fitness(tmp1,job.getOutput()));
+                queue.add(temp);
+            }
+
+
+            for(int i = 0; i < 10000; i++){
+                Thread jobThread = new JobThread(job, queue);
+                jobThread.start();
+                jobThread.join();
+            }
+
+            System.out.println("Done Evolving");
+            System.out.println(queue.peek().toString());
+            job.setEstimate(queue.peek().getData());
 
             OutputStream os = socket.getOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(os);
             out.writeObject(job);
-//            out.flush();
             in.close();
             is.close();
 
