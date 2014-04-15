@@ -50,8 +50,10 @@ public class LoadBalancer {
                         data = workerQueue.poll();
                     }
                     while ((new Date().getTime() - data.getDate().getTime() >= 2 * 1000));
-
-                    workerHash.remove(data.getHashKey());
+		    
+	            	data.incrementCount();
+	            	workerQueue.add(data);
+                    //workerHash.remove(data.getHashKey());
                     //System.out.println("Next worker: " + data);
                     oos.writeObject(data);
                     oos.close();

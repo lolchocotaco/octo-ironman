@@ -20,6 +20,10 @@ public class WorkerData implements Serializable {
         this.date = date;
     }
 
+    public void incrementCount() {
+	this.clientCount++;
+    }
+
     public String getHostname() {
         return this.hostname;
     }
