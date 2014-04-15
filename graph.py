@@ -21,4 +21,4 @@ end = time.time()
 
 elapsed = end - start
 
-print "Time to finish: ", elapsed
+print("Time to finish: ", elapsed)
