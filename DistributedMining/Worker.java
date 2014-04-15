@@ -15,8 +15,8 @@ import java.util.concurrent.*;
 
 
 public class Worker {
-    protected static final int THREAD_POOL_SIZE = 2;
-    protected static final int MAX_POOL_SIZE = 4;
+    protected static final int THREAD_POOL_SIZE = 4;
+    protected static final int MAX_POOL_SIZE = 20;
     protected static final int KEEP_ALIVE_TIME = 10;
     protected static final int WORK_Q_SIZE = 2;
 
